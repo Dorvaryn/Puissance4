@@ -134,3 +134,19 @@ tracerBranche(G, b, P, A, N):- N > 0,
 							   enregistrerCoupArbre(N, G, b, X), 
 							   tracerArbre(X, a, P, A),
 							   tracerBranche(G, b, P, A, N1).
+							   
+afficherGrille(G, N):-	 N > 0,
+						N1 is N-1,
+						maplist(nthElem(N), G, L),
+						afficherListe(L),
+						write('\n'),
+						afficherGrille(G, N1).
+
+afficherGrille(G):- afficherGrille(G,6).
+ 
+afficherListe([]):- write('|').
+afficherListe([E|L]):-  write('|'), 
+						afficherElement(E),
+						afficherListe(L).
+afficherElement([]):- write(' '),!.
+afficherElement(E):- write(E).
