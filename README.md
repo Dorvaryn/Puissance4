@@ -12,5 +12,4 @@ Le code est encore en chantier
 ### TODO ###
 * Implémentation minmax
 * Critère de victoire en diagonale
-* IA Naive
 * Controle d'une entrée de jeu de plus de 7 colones(éviter le false)

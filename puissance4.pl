@@ -31,6 +31,16 @@ enregistrerCoup(N, [T|X], J, [T|G], I):- 	N > 0,
 										N1 is N-1,
 										enregistrerCoup(N1, X, J, G, I).
 
+enregistrerCoupJoueur(1, [L|G], a, _, I):- longueur(L,N), N >= 6, write('Coup Invalide\n'), jouerCoupJoueur(I).
+enregistrerCoupJoueur(1, [L|G], J, F, I):- longueur(L,N), N < 6, ajoutFin(J,L,M), F=[M|G].
+enregistrerCoupJoueur(N, [T|X], J, [T|G], I):- 	N > 0,
+										N1 is N-1,
+										enregistrerCoupJoueur(N1, X, J, G, I).
+
+enregistrerCoupIA(1, [L|G], J, F, I):- longueur(L,N), N < 6, ajoutFin(J,L,M), F=[M|G].
+enregistrerCoupIA(N, [T|X], J, [T|G], I):- 	N > 0,
+										N1 is N-1,
+										enregistrerCoupIA(N1, X, J, G, I).
 % Condition de victoire verticale : 4 jetons les uns après les autres sur une même colonne
 /* Paramètres : G grille, J joueur */										
 finJeuVert([L|_],J):- sublist([J,J,J,J], L),!.
@@ -75,14 +85,49 @@ jouerCoupB(G):- write('Joueur B, entrez un numéro de colonne : '),
 % Lancement du jeu : grille de départ de 6*7 (vide). C'est le joueur 'a' qui commence, suivi par b, jusqu'à ce que l'un des deux gagne [ou GRILLE PLEINE]
 jouer:- jouerCoupA([[],[],[],[],[],[],[]]).
 
-coupGagnant(C,G,J):- enregistrerCoup(1,G,J,N,G), finJeu(N,J).
-coupGagnant(C,G,J):- enregistrerCoup(2,G,J,N,G), finJeu(N,J).
-coupGagnant(C,G,J):- enregistrerCoup(3,G,J,N,G), finJeu(N,J).
-coupGagnant(C,G,J):- enregistrerCoup(4,G,J,N,G), finJeu(N,J).
-coupGagnant(C,G,J):- enregistrerCoup(5,G,J,N,G), finJeu(N,J).
-coupGagnant(C,G,J):- enregistrerCoup(6,G,J,N,G), finJeu(N,J).
-coupGagnant(C,G,J):- enregistrerCoup(7,G,J,N,G), finJeu(N,J).
+coupGagnant(C,G,J):- enregistrerCoupIA(1,G,J,N,G), finJeu(N,J), C=1.
+coupGagnant(C,G,J):- enregistrerCoupIA(2,G,J,N,G), finJeu(N,J), C=2.
+coupGagnant(C,G,J):- enregistrerCoupIA(3,G,J,N,G), finJeu(N,J), C=3.
+coupGagnant(C,G,J):- enregistrerCoupIA(4,G,J,N,G), finJeu(N,J), C=4.
+coupGagnant(C,G,J):- enregistrerCoupIA(5,G,J,N,G), finJeu(N,J), C=5.
+coupGagnant(C,G,J):- enregistrerCoupIA(6,G,J,N,G), finJeu(N,J), C=6.
+coupGagnant(C,G,J):- enregistrerCoupIA(7,G,J,N,G), finJeu(N,J), C=7.
 
+jouerCoupJoueur(G):-finJeu(G,J), gagnant(J),!.
+jouerIA(G):-finJeu(G,J), gagnant(J),!.
+
+jouerIA(G):-   coupGagnant(C,G,b), enregistrerCoupIA(C,G,b,X,G),
+			   afficherGrille(X),
+			   write('\n'),
+			   jouerCoupJoueur(X).
+
+jouerIA(G):-   coupGagnant(C,G,a), enregistrerCoupIA(C,G,b,X,G),
+			   afficherGrille(X),
+			   write('\n'),
+			   jouerCoupJoueur(X).
+
+jouerIA(0, G):- write('Pas de coup trouvé').
+
+jouerIA(C, G):- enregistrerCoupIA(C,G,b,X,G),
+			    afficherGrille(X),
+			    write('\n'),
+			    jouerCoupJoueur(X).
+
+jouerIA(G):- jouerIA(4,G).
+jouerIA(G):- jouerIA(5,G).
+jouerIA(G):- jouerIA(3,G).
+jouerIA(G):- jouerIA(6,G).
+jouerIA(G):- jouerIA(2,G).
+jouerIA(G):- jouerIA(7,G).
+jouerIA(G):- jouerIA(1,G).
+
+jouerCoupJoueur(G):- write('Joueur A, entrez un numéro de colonne : '),
+				read(N), enregistrerCoupJoueur(N,G, a, X, G),
+				afficherGrille(X),
+				write('\n'),
+				jouerIA(X).
+
+lancerIA:- jouerIA([[],[],[],[],[],[],[]]).
 
 enregistrerCoupArbre(1, [L|G], J, [[J|L]|G]):- longueur(L,N), N < 6.
 enregistrerCoupArbre(N, [T|X], J, [T|G]):- 	N > 0,
