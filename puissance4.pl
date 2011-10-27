@@ -1,6 +1,9 @@
 max(X,Y,Y) :- Y>X, !.
 max(X,Y,X). 
 
+ajoutFin(X,[],[X]).
+ajoutFin(X,[Y|L1],[Y|L2]):- ajoutFin(X,L1,L2).
+
 % Fonction qui renvoie une sous-liste à partir d'une liste L
 % description...
 /* Paramètres : S sous-liste, L liste */
@@ -23,7 +26,7 @@ nthElem(N, L, X):- nth1(N, L, X).
 /* Paramètres : N numéro de la colonne dans laquelle J joue, G grille, J joueur, G' nouvelle grille */		
 enregistrerCoup(1, [L|G], a, _, I):- longueur(L,N), N >= 6, write('Coup Invalide\n'), jouerCoupA(I).
 enregistrerCoup(1, [L|G], b, _, I):- longueur(L,N), N >= 6, write('Coup Invalide\n'), jouerCoupB(I).
-enregistrerCoup(1, [L|G], J, [[J|L]|G], I):- longueur(L,N), N < 6.
+enregistrerCoup(1, [L|G], J, F, I):- longueur(L,N), N < 6, ajoutFin(J,L,M), F=[M|G].
 enregistrerCoup(N, [T|X], J, [T|G], I):- 	N > 0,
 										N1 is N-1,
 										enregistrerCoup(N1, X, J, G, I).
@@ -60,23 +63,31 @@ jouerCoupA(G):-finJeu(G,J), gagnant(J),!.
 jouerCoupB(G):-finJeu(G,J), gagnant(J),!.
 jouerCoupA(G):- write('Joueur A, entrez un numéro de colonne : '),
 				read(N), enregistrerCoup(N,G, a, X, G),
-				write(X),
+				afficherGrille(X),
 				write('\n'),
 				jouerCoupB(X).
 jouerCoupB(G):- write('Joueur B, entrez un numéro de colonne : '),
 				read(N), enregistrerCoup(N,G, b, X, G),
-				write(X),
+				afficherGrille(X),
 				write('\n'),
 				jouerCoupA(X).
 
 % Lancement du jeu : grille de départ de 6*7 (vide). C'est le joueur 'a' qui commence, suivi par b, jusqu'à ce que l'un des deux gagne [ou GRILLE PLEINE]
 jouer:- jouerCoupA([[],[],[],[],[],[],[]]).
 
+coupGagnant(C,G,J):- enregistrerCoup(1,G,J,N,G), finJeu(N,J).
+coupGagnant(C,G,J):- enregistrerCoup(2,G,J,N,G), finJeu(N,J).
+coupGagnant(C,G,J):- enregistrerCoup(3,G,J,N,G), finJeu(N,J).
+coupGagnant(C,G,J):- enregistrerCoup(4,G,J,N,G), finJeu(N,J).
+coupGagnant(C,G,J):- enregistrerCoup(5,G,J,N,G), finJeu(N,J).
+coupGagnant(C,G,J):- enregistrerCoup(6,G,J,N,G), finJeu(N,J).
+coupGagnant(C,G,J):- enregistrerCoup(7,G,J,N,G), finJeu(N,J).
+
+
 enregistrerCoupArbre(1, [L|G], J, [[J|L]|G]):- longueur(L,N), N < 6.
 enregistrerCoupArbre(N, [T|X], J, [T|G]):- 	N > 0,
 										N1 is N-1,
 										enregistrerCoupArbre(N1, X, J, G).
-
 % Evaluation de la grille de jeu
 /* Paramètres : G grille, J joueur */
 evalVert([], _, P, X):- X=P, write(fini).										
@@ -134,7 +145,7 @@ tracerBranche(G, b, P, A, N):- N > 0,
 							   enregistrerCoupArbre(N, G, b, X), 
 							   tracerArbre(X, a, P, A),
 							   tracerBranche(G, b, P, A, N1).
-							   
+afficherGrille(_,0).							   
 afficherGrille(G, N):-	 N > 0,
 						N1 is N-1,
 						maplist(nthElem(N), G, L),
