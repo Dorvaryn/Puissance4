@@ -56,8 +56,7 @@ finJeuHor(N, G, J):- N > 0,
 
 finJeuHor(G,J):- finJeuHor(6, G, J).				 
 
-uneFinDiag(G,D,J,0):- sublist([J,J,J,J],D),!.
-%uneFinDiag(G,D,J,0).
+uneFinDiag(G,D,J,0):- sublist([J,J,J,J],D).
 uneFinDiag(G,D,J,N):- N > 0,
 					  maplist(nthElem(N), G, L),
 					  nthElem(N,L,E),
@@ -66,13 +65,25 @@ uneFinDiag(G,D,J,N):- N > 0,
 
 uneFinDiag(G,J):- uneFinDiag(G,[],J,6).
 
-finJeuDiag(G,N,X,J):- N > 0,
-					  uneFinDiag(X,J),
+autreFinDiag(G,D,J,0):- sublist([J,J,J,J],D).
+autreFinDiag(G,D,J,N):- N > 0,
+					    maplist(nthElem(N), G, L),
+						N2 is 7-N,
+						nthElem(N2,L,E),
+					    N1 is N-1,
+					    autreFinDiag(G,[E|D],J,N1).
+
+autreFinDiag(G,J):- autreFinDiag(G,[],J,6).
+
+
+finJeuDiag(G,N,X,J):- autreFinDiag(X,J),!.
+finJeuDiag(G,N,X,J):- uneFinDiag(X,J),!.
+finJeuDiag(G,N,X,J):- N < 7,
 					  maplist(nthElem(N), G, L),
-					  N1 is N-1,
+					  N1 is N+1,
 					  finJeuDiag(G,N1,[L|X],J).
 
-finJeuDiag(G,J):- finJeuDiag(G,6,[],J).
+finJeuDiag(G,J):- finJeuDiag(G,1,[],J).
 
 % Définition et test des conditions de fin de jeu
 /* Paramètres : G grille, J joueur */
