@@ -91,6 +91,8 @@ finJeu(G, J):- finJeuVert(G,a), J=a.
 finJeu(G, J):- finJeuVert(G,b), J=b.
 finJeu(G, J):- finJeuHor(G,a), J=a.
 finJeu(G, J):- finJeuHor(G,b), J=b.
+finJeu(G, J):- finJeuDiag(G,a), J=a.
+finJeu(G, J):- finJeuDiag(G,b), J=b.
 
 % Affichage du gagnant
 /* Paramètres : J joueur */
