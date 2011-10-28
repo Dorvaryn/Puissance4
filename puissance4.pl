@@ -56,6 +56,15 @@ finJeuHor(N, G, J):- N > 0,
 
 finJeuHor(G,J):- finJeuHor(6, G, J).				 
 
+uneFinDiag(G,D,J,0):- sublist([J,J,J,J],D).
+uneFinDiag(G,D,J,N):- N > 0,
+					  maplist(nthElem(N), G, L),
+					  nthElem(N,L,E),
+					  N1 is N-1,
+					  uneFinDiag(G,[E|D],J,N1).
+
+finDiag(G,J):- uneFinDiag(G,[],J,6).
+
 % Définition et test des conditions de fin de jeu
 /* Paramètres : G grille, J joueur */
 finJeu(G, J):- finJeuVert(G,a), J=a.
