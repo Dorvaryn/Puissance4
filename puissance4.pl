@@ -116,6 +116,7 @@ jouerCoupB(G):- write('Joueur B, entrez un numéro de colonne : '),
 % Lancement du jeu : grille de départ de 6*7 (vide). C'est le joueur 'a' qui commence, suivi par b, jusqu'à ce que l'un des deux gagne [ou GRILLE PLEINE]
 jouer:- jouerCoupA([[],[],[],[],[],[],[]]).
 
+%Un coup gagant est un coup qui mene à un état de jeu ou le joueur est vainqueur
 coupGagnant(C,G,J):- enregistrerCoupIA(1,G,J,N,G), finJeu(N,J), C=1.
 coupGagnant(C,G,J):- enregistrerCoupIA(2,G,J,N,G), finJeu(N,J), C=2.
 coupGagnant(C,G,J):- enregistrerCoupIA(3,G,J,N,G), finJeu(N,J), C=3.
@@ -127,11 +128,13 @@ coupGagnant(C,G,J):- enregistrerCoupIA(7,G,J,N,G), finJeu(N,J), C=7.
 jouerCoupJoueur(G):-finJeu(G,J), gagnant(J),!.
 jouerIA(G):-finJeu(G,J), gagnant(J),!.
 
+%Si un coup permet de gagner il faut le jouer.
 jouerIA(G):-   coupGagnant(C,G,b), enregistrerCoupIA(C,G,b,X,G),
 			   afficherGrille(X),
 			   write('\n'),
 			   jouerCoupJoueur(X).
 
+%Si un coup permet a l'adversaire de jouer on se défend.
 jouerIA(G):-   coupGagnant(C,G,a), enregistrerCoupIA(C,G,b,X,G),
 			   afficherGrille(X),
 			   write('\n'),
@@ -139,11 +142,13 @@ jouerIA(G):-   coupGagnant(C,G,a), enregistrerCoupIA(C,G,b,X,G),
 
 jouerIA(0, G):- write('Pas de coup trouvé').
 
+
 jouerIA(C, G):- enregistrerCoupIA(C,G,b,X,G),
 			    afficherGrille(X),
 			    write('\n'),
 			    jouerCoupJoueur(X).
 
+%Si on a pas de coup immédiat on fait un coup au centre ou au plus près possible.
 jouerIA(G):- jouerIA(4,G).
 jouerIA(G):- jouerIA(5,G).
 jouerIA(G):- jouerIA(3,G).
@@ -151,6 +156,7 @@ jouerIA(G):- jouerIA(6,G).
 jouerIA(G):- jouerIA(2,G).
 jouerIA(G):- jouerIA(7,G).
 jouerIA(G):- jouerIA(1,G).
+jouerIA(G):- jouerIA(0,G).
 
 jouerCoupJoueur(G):- write('Joueur A, entrez un numéro de colonne : '),
 				read(N), enregistrerCoupJoueur(N,G, a, X, G),
