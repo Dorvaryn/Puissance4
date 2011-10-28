@@ -11,5 +11,4 @@ Le code est encore en chantier
 
 ### TODO ###
 * Implémentation minmax
-* Critère de victoire en diagonale
 * Controle d'une entrée de jeu de plus de 7 colones(éviter le false)
