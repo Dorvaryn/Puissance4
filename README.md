@@ -7,9 +7,8 @@ Un petit jeu de Puissance 4 en Prolog
 * Ghislaine El Azhar <gelazhar@gmail.com>
 
 ## Etat ##
-Le code est encore en chantier
+Projet terminé.
+Une IA utilisant min max pourra être implémentée par la suite sur ce projet histoire de voir l'apport sur ce type de jeu d'un min max face à une IA gloutonne + quelques comportements usuels.
 
 ### TODO ###
 * Implémentation minmax
-* Controle d'une entrée de jeu de plus de 7 colones(éviter le false)
-* Vérifier finJeu ou l'IA afin de trouver pourquoi dans certains cas l'IA ne joue pas le coup gagnant(peut être que finJeu ne détecte pas tout les cas de victoire)
