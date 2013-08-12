@@ -4,7 +4,7 @@ Un petit jeu de Puissance 4 en Prolog
 ## Auteurs ##
 
 * Benjamin Augustin <benjamin@odai.homelinux.net>
-* Ghislaine El Azhar <gelazhar@gmail.com>
+* Ghislaine El Azhar <ghislaine.el-azhar@insa-lyon.fr>
 
 ## Etat ##
 Projet terminé.
